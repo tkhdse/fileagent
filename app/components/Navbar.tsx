@@ -1,7 +1,7 @@
 'use client'
 
 // import Image, { StaticImageData } from "next/image";
-import { supabase } from "@/utils/supabaseClient";
+import { supabase } from "@/libs/supabaseClient";
 import Link from "next/link";
 import Profile from "./Profile";
 import img from "@/public/user-icon.png"

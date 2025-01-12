@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { supabase } from '@/utils/supabaseClient'
+import { supabase } from '@/libs/supabaseClient'
 import * as Form from '@radix-ui/react-form'
 
 export default function Login() {

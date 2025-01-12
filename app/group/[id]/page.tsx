@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from "next";
 import { ParsedUrlQuery } from 'querystring';
-import { supabase } from "@/utils/supabaseClient";
+import { supabase } from "@/libs/supabaseClient";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 
 
