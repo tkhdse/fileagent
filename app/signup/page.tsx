@@ -1,14 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import { supabase } from '@/libs/supabaseClient'
 import * as Form from '@radix-ui/react-form'
 
 export default function Login() {
 
     const [error, setError] = useState("");
-    const router = useRouter();
+    // const router = useRouter();
 
     const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -20,6 +20,21 @@ export default function Login() {
         if (password != confirm) {
             setError("Passwords do not match");
             return;
+        }
+
+        try {
+            const res = await fetch('/api/auth', {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({email, password})
+            })
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.data);
+            }
+        } catch (error) {
+            console.log(error);
         }
 
         const { error } = await supabase.auth.signUp({email, password});

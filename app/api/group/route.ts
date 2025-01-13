@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     try {
         const {data: group_data, error: group_error} = await supabase
-            .from('group')
+            .from('groups')
             .insert({name: name, description: description.trim(), created_by: created_by})
             .select();
 
@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
         .insert({user_id: created_by, group_id: group_id})
         .select()
         
-        console.log(member_data)
-        console.log(member_error)
+        // console.log(member_data)
+        // console.log(member_error)
         
 
     } catch (error) {
