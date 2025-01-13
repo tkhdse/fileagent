@@ -3,12 +3,12 @@
 import Modal from "./Modal";
 import useGroupModal from "@/hooks/useGroupModal";
 import * as Form from '@radix-ui/react-form'
-import { useState } from "react";
+import { useAuth } from "@/libs/AuthContext";
 
 
 const GroupModal = () => {
     const groupModal = useGroupModal();
-    const [error, setError] = useState("");
+    const {user, loading} = useAuth();
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -18,10 +18,30 @@ const GroupModal = () => {
 
     const createNewGroup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        const formData = new FormData(event.currentTarget);
+        const name = formData.get('name')?.toString() ?? "";
+        const description = formData.get('description')?.toString() ?? "";
 
+        // send request 
+        const res = await fetch('/api/group', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name,
+                description,
+                created_by: user?.id
+            })
+        })
+
+        if (!res.ok) {
+            console.log(res)
+            throw new Error("Failed to make group");
+        }
 
         groupModal.onClose();
     }
+
+    if (loading) return <></>
 
     return (
         <Modal 
@@ -32,10 +52,10 @@ const GroupModal = () => {
         >
 
             <Form.Root className="flex flex-col items-center mt-[25px] w-[100%]" onSubmit={createNewGroup}>
-                <Form.Field name="" className="w-[100%] flex flex-col mb-[20px]">
+                <Form.Field name="name" className="w-[100%] flex flex-col mb-[20px]">
                     <div className="flex justify-between">
                         <Form.Label className="">Name</Form.Label>
-                        <span className={`text-sm ${error ? "text-red-500" : "text-black"}`}>*Required</span>
+                        <span className="text-sm text-black">*Required</span>
                     </div>
                     <Form.Control asChild>
                     <input
@@ -49,7 +69,7 @@ const GroupModal = () => {
                 <Form.Field name="description" className="w-[100%] flex flex-col mb-[20px]">
                     <div className="flex justify-between">
                         <Form.Label className="">Description</Form.Label>
-                        <span className={`text-sm ${error ? "text-red-500" : "text-black"}`}>*Required</span>
+                        <span className="text-sm text-black">*Required</span>
                     </div>
                     <Form.Control asChild>
                     <textarea

@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { ParsedUrlQuery } from 'querystring';
 import { supabase } from "@/libs/supabaseClient";
-import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
+import { Group } from "@/types/types";
 
 
 interface Params extends ParsedUrlQuery {
@@ -9,13 +9,13 @@ interface Params extends ParsedUrlQuery {
   }
 
 
-export default function Network({network} : {network : any}) {
+export default function Network({group} : {group : Group}) {
 
   return (
     <>
       {/* <Navbar profile={img}/> */}
       <div className="flex-col w-[85%] ml-[7.5%] mt-[150px]">
-        <span className="text-black text-2xl">{network}</span>
+        <span className="text-black text-2xl">{group.name}</span>
         <div className="w-full grid grid-cols-4 gap-4 mt-5">
 
         </div>
@@ -26,7 +26,7 @@ export default function Network({network} : {network : any}) {
 
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-    const { network_id }  = ctx.params as Params
+    const { group_id }  = ctx.params as Params
     // const supabase = createMiddlewareClient({req : ctx.req})
     const  {
         data: { session }
@@ -46,7 +46,7 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
         .from('network_members')
         .select('*')
         .eq('user_id', userId)
-        .eq('network_id', network_id)
+        .eq('network_id', group_id)
         .single();
 
     if (!isMember) {
@@ -59,19 +59,19 @@ export async function getServerSideProps(ctx: GetServerSidePropsContext) {
     }
 
     // Fetch community details
-    const { data: network, error } = await supabase
+    const { data: group, error } = await supabase
         .from('network')
         .select('*')
-        .eq('id', network_id)
+        .eq('id', group_id)
         .single();
 
-    if (error || !network) {
+    if (error || !group) {
         return {
         notFound: true,
         };
     }
 
     return {
-        props: { network },
+        props: { group },
     };
 }

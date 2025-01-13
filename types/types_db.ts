@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      group: {
+      network: {
         Row: {
           created_at: string
           created_by: string | null
@@ -33,23 +33,23 @@ export type Database = {
         }
         Relationships: []
       }
-      group_members: {
+      network_members: {
         Row: {
-          group_id: string | null
           id: string
           joined_at: string
+          network_id: string | null
           user_id: string | null
         }
         Insert: {
-          group_id?: string | null
           id?: string
           joined_at?: string
+          network_id?: string | null
           user_id?: string | null
         }
         Update: {
-          group_id?: string | null
           id?: string
           joined_at?: string
+          network_id?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -57,7 +57,7 @@ export type Database = {
             foreignKeyName: "network_members_id_fkey"
             columns: ["id"]
             isOneToOne: true
-            referencedRelation: "group"
+            referencedRelation: "network"
             referencedColumns: ["id"]
           },
           {

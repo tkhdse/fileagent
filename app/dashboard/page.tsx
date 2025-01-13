@@ -2,22 +2,23 @@
 
 import Card from "../components/Card";
 import Image from "next/image";
-import { GetServerSidePropsContext } from "next";
-import { supabase } from "@/libs/supabaseClient";
+// import { GetServerSidePropsContext } from "next";
+// import { supabase } from "@/libs/supabaseClient";
 import icon from '@/public/plus.png'
 import useGroupModal from "@/hooks/useGroupModal";
+// import { useAuth } from "@/libs/AuthContext";
 
 
-export default function Dashboard({user} : {user : any}) {
+export default function Dashboard() {
 
-  // user
+  // const {user, loading} = useAuth();
 
-  const networks = ["TG", "MP", "joe mama", "UIUC", "JHVRD"];
+  const networks = ["TG", "MP", "Nerve", "UIUC", "JHVRD"];
   
   const modal = useGroupModal();
 
   // database query from network_members to retrieve list of networks + descriptions
-
+  // if (loading) return <></>
   return (
     <>
       {/* <Navbar profile={img}/> */}

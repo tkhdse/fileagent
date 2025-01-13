@@ -1,50 +1,24 @@
 'use client'
 
-// import Image, { StaticImageData } from "next/image";
 import { supabase } from "@/libs/supabaseClient";
 import Link from "next/link";
 import Profile from "./Profile";
 import img from "@/public/user-icon.png"
-import { useState, useEffect } from "react";
-import { User } from "@supabase/supabase-js";
+import { useAuth } from "@/libs/AuthContext";
 
-interface NavbarProps {
-    // profile: StaticImageData,
+// interface NavbarProps {
 
-};
+// };
 
-const Navbar: React.FC<NavbarProps> = ({}) => {
-    // const { 
-    //     data: {curr_user},
-    // } = await supabase.auth.getUser();
+const Navbar = ({}) => {
 
-    const [user, setUser] = useState<User | null>(null);
-
-    useEffect(() => {
-
-      const getSession = async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user || null);
-      };
-  
-      getSession();
-  
-      const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
-        console.log('Auth event:', event);
-        setUser(session?.user || null);
-      });
-  
-      // Cleanup subscription on unmount
-      return () => {
-        // subscription.unsubscribe();
-      };
-    }, []);
+    const {user, loading} = useAuth();
 
     const signOut = async () => {
         await supabase.auth.signOut();
-        setUser(null)
     }
 
+    if (loading) return (<></>)
 
     return (
         <div className="w-full h-[60px] bg-slate-600 items-center">

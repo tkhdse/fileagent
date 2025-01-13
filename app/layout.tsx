@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import { AuthProvider } from "@/libs/AuthContext";
 import ModalProvider from "./components/modal/ModalProvider"
 import { Theme } from "@radix-ui/themes";
 
@@ -31,11 +32,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Theme>
-          <Navbar />
-          <ModalProvider />
-
-          {/* global elements go here */}
-          {children}
+          <AuthProvider>
+            <Navbar />
+            <ModalProvider />
+            {children}
+          </AuthProvider>
         </Theme>
       </body>
     </html>
