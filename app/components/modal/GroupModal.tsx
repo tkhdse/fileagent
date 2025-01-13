@@ -4,11 +4,13 @@ import Modal from "./Modal";
 import useGroupModal from "@/hooks/useGroupModal";
 import * as Form from '@radix-ui/react-form'
 import { useAuth } from "@/libs/AuthContext";
+import { useRouter } from "next/navigation";
 
 
 const GroupModal = () => {
     const groupModal = useGroupModal();
     const {user, loading} = useAuth();
+    const router = useRouter();
 
     const onChange = (open: boolean) => {
         if (!open) {
@@ -38,6 +40,7 @@ const GroupModal = () => {
             throw new Error("Failed to make group");
         }
 
+        router.refresh();
         groupModal.onClose();
     }
 

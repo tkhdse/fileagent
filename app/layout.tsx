@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { AuthProvider } from "@/libs/AuthContext";
+import { AuthProvider } from "@/libs/context/AuthContext";
 import ModalProvider from "./components/modal/ModalProvider"
 import { Theme } from "@radix-ui/themes";
 

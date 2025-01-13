@@ -1,41 +1,17 @@
-"use client"
-
-import Card from "../components/Card";
-import Image from "next/image";
-// import { GetServerSidePropsContext } from "next";
-// import { supabase } from "@/libs/supabaseClient";
-import icon from '@/public/plus.png'
-import useGroupModal from "@/hooks/useGroupModal";
-// import { useAuth } from "@/libs/AuthContext";
+import Dashboard from "../components/Dashboard";
+import AddModal from "../components/modal/AddModal";
 
 
-export default function Dashboard() {
+export default function DashboardPage() {
 
-  // const {user, loading} = useAuth();
-
-  const networks = ["TG", "MP", "Nerve", "UIUC", "JHVRD"];
-  
-  const modal = useGroupModal();
-
-  // database query from network_members to retrieve list of networks + descriptions
-  // if (loading) return <></>
   return (
     <>
-      {/* <Navbar profile={img}/> */}
       <div className="flex-col w-[85%] ml-[7.5%] mt-[150px]">
-        <div className="flex justify-between items-center">
-          <span className="text-black text-2xl">Your Networks</span>
-          <Image src={icon} alt="add" className="w-[20px] h-[20px] cursor-pointer" onClick={modal.onOpen}/>
+        <div className="flex justify-between items-center pb-2 border-b-[1px] border-b-black">
+          <span className="text-black text-2xl">Your Groups</span>
+          <AddModal />
         </div>
-        <div className="w-full grid grid-cols-4 gap-4 mt-5">
-            {
-              networks.map((entry, i) =>
-                 <Card key={i} name={entry} description={"temp description " + i} num_collab={0}></Card>
-              )
-            }
-
-
-        </div>
+        <Dashboard />
       </div>  
     </>
   );

@@ -4,7 +4,7 @@ import { supabase } from "@/libs/supabaseClient";
 import Link from "next/link";
 import Profile from "./Profile";
 import img from "@/public/user-icon.png"
-import { useAuth } from "@/libs/AuthContext";
+import { useAuth } from "@/libs/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 // interface NavbarProps {
@@ -33,7 +33,7 @@ const Navbar = ({}) => {
                 <div className="flex gap-4 items-center">
                     <span className="text-gray-200">{user.id}</span>
                     <Link className="text-gray-200 cursor-pointer border-[1px] border-slate-400 rounded-lg p-2" href="/dashboard">Dashboard</Link> 
-                    <span className="text-gray-200 cursor-pointer border-[1px] border-slate-400 rounded-lg p-2" onClick={signOut}>Sign out</span>
+                    <Link className="text-gray-200 cursor-pointer border-[1px] border-slate-400 rounded-lg p-2" href="/login" onClick={signOut}>Sign out</Link>
                     <Profile image={img}/> 
                 </div>
                 
