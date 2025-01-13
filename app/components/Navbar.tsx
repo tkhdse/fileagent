@@ -5,6 +5,7 @@ import Link from "next/link";
 import Profile from "./Profile";
 import img from "@/public/user-icon.png"
 import { useAuth } from "@/libs/AuthContext";
+import { useRouter } from "next/navigation";
 
 // interface NavbarProps {
 
@@ -13,6 +14,7 @@ import { useAuth } from "@/libs/AuthContext";
 const Navbar = ({}) => {
 
     const {user, loading} = useAuth();
+    const router = useRouter();
 
     const signOut = async () => {
         await supabase.auth.signOut();
@@ -23,14 +25,15 @@ const Navbar = ({}) => {
     return (
         <div className="w-full h-[60px] bg-slate-600 items-center">
             <div className="flex justify-between h-[100%] items-center mx-8">
-                <div className="text-gray-200 text-2xl">
+                <div className="text-gray-200 text-2xl select-none cursor-pointer" onClick={() => router.push('/')}>
                     File Agent
                 </div>
 
                 {user ? (
                 <div className="flex gap-4 items-center">
-                    <Link className="text-gray-200 cursor-pointer" href="/login" onClick={signOut}>Sign out</Link>
                     <span className="text-gray-200">{user.id}</span>
+                    <Link className="text-gray-200 cursor-pointer border-[1px] border-slate-400 rounded-lg p-2" href="/dashboard">Dashboard</Link> 
+                    <span className="text-gray-200 cursor-pointer border-[1px] border-slate-400 rounded-lg p-2" onClick={signOut}>Sign out</span>
                     <Profile image={img}/> 
                 </div>
                 
