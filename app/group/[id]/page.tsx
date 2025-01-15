@@ -1,77 +1,55 @@
-// import { GetServerSidePropsContext } from "next";
-// import { ParsedUrlQuery } from 'querystring';
-// import { supabase } from "@/libs/supabaseClient";
-// import { Group } from "@/types/types";
+"use client"
 
-
-// interface Params extends ParsedUrlQuery {
-//     network_id: string; // Define your expected parameter
-//   }
-
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Group } from '@/types/types'
+import { supabase } from "@/libs/supabaseClient";
+import PromptInput from "@/app/components/PromptInput";
 
 export default function GroupPage() {
+  const params = useParams();
+  const id = params.id;
+
+  const [group, setGroup] = useState<Group | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchGroup = async () => {
+      const { data, error } = await supabase
+        .from('groups')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (data) {
+        setGroup(data);
+      } else {
+        console.error(error);
+      }
+    };
+
+    fetchGroup();
+  }, [id]);
 
   return (
     <>
       {/* <Navbar profile={img}/> */}
-      <div className="flex-col w-[85%] ml-[7.5%] mt-[150px]">
-        <span className="text-black text-2xl">group.name</span>
-        <div className="w-full grid grid-cols-4 gap-4 mt-5">
+      <div className="flex-col w-[95%] ml-[2.5%] mt-[25px]">
+        <span className="text-black text-2xl">{group?.name}</span>
+        <div className="w-full flex mt-5">
+          <div className="w-[20%] border-[1px] border-black m-2">
+            Files/Documents
+          </div>
 
+          <div className="w-[80%] m-2">
+            Language Model
+            <div className="p-4">
+              <PromptInput />
+            </div>
+          </div>
         </div>
       </div>  
     </>
   );
 }
-
-
-// export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-//     const { group_id }  = ctx.params as Params
-//     // const supabase = createMiddlewareClient({req : ctx.req})
-//     const  {
-//         data: { session }
-//     } = await supabase.auth.getSession();
-
-//     if (!session) {
-//         return {
-//             redirect: {
-//               destination: '/login',
-//               permanent: false,
-//             },
-//         };
-//     }
-
-//     const userId = session.user.id;
-//     const { data: isMember } = await supabase
-//         .from('group_members')
-//         .select('*')
-//         .eq('user_id', userId)
-//         .eq('group_id', group_id)
-//         .single();
-
-//     if (!isMember) {
-//         return {
-//             redirect: {
-//               destination: '/dashboard', // change to unauthorized access
-//               permanent: false,
-//             },
-//         };
-//     }
-
-//     // Fetch community details
-//     const { data: group, error } = await supabase
-//         .from('network')
-//         .select('*')
-//         .eq('id', group_id)
-//         .single();
-
-//     if (error || !group) {
-//         return {
-//         notFound: true,
-//         };
-//     }
-
-//     return {
-//         props: { group },
-//     };
-// }

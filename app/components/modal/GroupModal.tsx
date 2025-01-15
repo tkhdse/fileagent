@@ -3,7 +3,7 @@
 import Modal from "./Modal";
 import useGroupModal from "@/hooks/useGroupModal";
 import * as Form from '@radix-ui/react-form'
-import { useAuth } from "@/libs/AuthContext";
+import { useAuth } from "@/libs/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 
