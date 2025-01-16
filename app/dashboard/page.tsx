@@ -1,7 +1,6 @@
 import Dashboard from "../components/Dashboard";
 import AddModal from "../components/modal/AddModal";
 
-
 export default function DashboardPage() {
 
   return (
