@@ -1,4 +1,4 @@
-import getGroups from "@/libs/getGroups";
+import getGroups from "@/app/libs/getGroups";
 import Card from "../components/Card";
 
 const Dashboard = async () => {

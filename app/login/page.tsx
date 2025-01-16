@@ -1,15 +1,17 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { supabase } from '@/libs/supabaseClient'
 import * as Form from '@radix-ui/react-form'
+import { useSessionContext } from '@supabase/auth-helpers-react'
 
 export default function Login() {
 
     const [error, setError] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
+    const { session } = useSessionContext();
+    const redirectPath = searchParams.get('redirect') || "/dashboard"
 
     const handleLogIn = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -17,15 +19,38 @@ export default function Login() {
         const email = formData.get('email')?.toString() ?? "";
         const password = formData.get('password')?.toString() ?? "";
 
-        const { error } = await supabase.auth.signInWithPassword({email, password});
-        if (error) {
-            setError(error.message);
-        } else {
-            setError("");
-            const redirectPath = searchParams.get('redirectedFrom') || "/dashboard"
-            router.push(redirectPath);
-        }   
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type' : 'application/json'},
+                body: JSON.stringify({email, password})
+            })
+
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.data);
+            }
+
+            const data = await res.json();
+            console.log(data)
+
+        } catch (error) {
+            console.log(error);
+            setError("There was an issue logging into your account");
+            return;
+        } 
+
+        // router.push('/dashboard')
     }
+
+    useEffect(() => {
+        if (session) {
+            router.refresh();
+            console.log(redirectPath)
+            router.push(redirectPath);
+        }
+    }, [session, router, redirectPath])
 
     return (
         <>

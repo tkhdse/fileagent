@@ -1,10 +1,10 @@
 'use client'
 
-import { supabase } from "@/libs/supabaseClient";
+import { supabase } from "@/app/libs/supabaseClient";
 import Link from "next/link";
 import Profile from "./Profile";
 import img from "@/public/user-icon.png"
-import { useAuth } from "@/libs/context/AuthContext";
+import { useUser } from "@/app/hooks/useUser";
 import { useRouter } from "next/navigation";
 
 // interface NavbarProps {
@@ -13,14 +13,14 @@ import { useRouter } from "next/navigation";
 
 const Navbar = ({}) => {
 
-    const {user, loading} = useAuth();
+    const {user, isLoading} = useUser();
     const router = useRouter();
 
     const signOut = async () => {
         await supabase.auth.signOut();
     }
 
-    if (loading) return (<></>)
+    if (isLoading) return (<></>)
 
     return (
         <div className="w-full h-[60px] bg-slate-600 items-center">

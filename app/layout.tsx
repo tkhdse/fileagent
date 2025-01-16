@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
-import { AuthProvider } from "@/libs/context/AuthContext";
-import ModalProvider from "./components/modal/ModalProvider"
+import SupabaseProvider from "./providers/SupabaseProvider";
+import UserProvider  from "@/app/providers/UserProvider";
+import ModalProvider from "@/app/providers/ModalProvider"
 import { Theme } from "@radix-ui/themes";
 
 const geistSans = Geist({
@@ -32,11 +33,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Theme>
-          <AuthProvider>
-            <Navbar />
-            <ModalProvider />
-            {children}
-          </AuthProvider>
+          <SupabaseProvider>
+            <UserProvider>
+              <Navbar />
+              <ModalProvider />
+              {children}
+            </UserProvider>
+          </SupabaseProvider>
         </Theme>
       </body>
     </html>

@@ -1,8 +1,8 @@
 'use client'
 
-import Modal from "./Modal";
+// import Modal from "./Modal";
 import { useState, useEffect } from "react";
-import GroupModal from "./GroupModal";
+import GroupModal from "@/app/components/modal/GroupModal";
 
 const ModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false);

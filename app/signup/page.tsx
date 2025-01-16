@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-// import { useRouter } from 'next/navigation'
-import { supabase } from '@/libs/supabaseClient'
 import * as Form from '@radix-ui/react-form'
 
 export default function Login() {
@@ -23,7 +21,7 @@ export default function Login() {
         }
 
         try {
-            const res = await fetch('/api/auth', {
+            const res = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json'},
                 body: JSON.stringify({email, password})
@@ -35,14 +33,12 @@ export default function Login() {
             }
         } catch (error) {
             console.log(error);
+            setError("There was an issue making your account");
+            return;
         }
 
-        const { error } = await supabase.auth.signUp({email, password});
-        if (error) {
-            setError(error.message);
-        } else {
-            alert("Confirm email (check your inbox)");
-        }
+        alert("Confirm email (check your inbox)");
+        
     }
 
 

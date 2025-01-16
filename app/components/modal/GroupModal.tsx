@@ -1,15 +1,15 @@
 'use client'
 
 import Modal from "./Modal";
-import useGroupModal from "@/hooks/useGroupModal";
+import useGroupModal from "@/app/hooks/useGroupModal";
 import * as Form from '@radix-ui/react-form'
-import { useAuth } from "@/libs/context/AuthContext";
+import { useUser } from "@/app/hooks/useUser";
 import { useRouter } from "next/navigation";
 
 
 const GroupModal = () => {
     const groupModal = useGroupModal();
-    const {user, loading} = useAuth();
+    const {user, isLoading} = useUser();
     const router = useRouter();
 
     const onChange = (open: boolean) => {
@@ -44,7 +44,7 @@ const GroupModal = () => {
         groupModal.onClose();
     }
 
-    if (loading) return <></>
+    if (isLoading) return <></>
 
     return (
         <Modal 

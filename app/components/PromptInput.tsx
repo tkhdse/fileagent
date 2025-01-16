@@ -70,7 +70,7 @@ const PromptInput = () => {
                             h-[30px] 
                             ml-auto 
                             mr-2 
-                            ${prompt ? "bg-slate-400 " : "bg-slate-200"}
+                            ${prompt ? "bg-slate-300 " : "bg-slate-200"}
                             rounded-lg`
                         }>
                         <Image src={icon} alt="submit" className="w-[20px] h-[20px] cursor-pointer" />

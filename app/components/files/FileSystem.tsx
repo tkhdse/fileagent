@@ -5,8 +5,10 @@ import Folder from "./FolderEntry";
 const FileSystem = () => {
     return (
         <div className="border-[1px] border-black  rounded-md p-4">
-            <Folder name="root" />
-            <File name="index" />
+            <Folder name="(root) /" />
+            <div className="ml-4">
+                <File name="index" />
+            </div>
         </div>
     )
 };

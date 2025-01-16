@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import icon from '@/public/plus.png'
-import useGroupModal from "@/hooks/useGroupModal";
+import useGroupModal from "@/app/hooks/useGroupModal";
 
 
 const AddModal = () => {

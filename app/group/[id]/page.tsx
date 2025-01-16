@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Group } from '@/types/types'
-import { supabase } from "@/libs/supabaseClient";
+import { supabase } from "@/app/libs/supabaseClient";
 import PromptInput from "@/app/components/PromptInput";
 import FileSystem from "@/app/components/files/FileSystem";
 
@@ -36,10 +36,14 @@ export default function GroupPage() {
   return (
     <>
       {/* <Navbar profile={img}/> */}
-      <div className="flex-col w-[95%] ml-[2.5%] mt-[25px]">
-        <span className="text-black text-2xl">{group?.name}</span>
+      <div className="flex flex-col w-[95%] ml-[2.5%] mt-[25px]">
+        <div className="flex flex-col ">
+          <span className="text-2xl text-black">{group?.name}</span>
+          <span className="text-sm mt-2 ml-10 text-slate-600">{group?.description}</span>
+        </div>
+
         <div className="w-full flex mt-5">
-          <div className="w-[20%]  m-2">
+          <div className="w-[30%]  m-2">
             <span className="p-2">
               Files/Documents
             </span>
@@ -48,7 +52,7 @@ export default function GroupPage() {
             </div>
           </div>
 
-          <div className="w-[80%] m-2">
+          <div className="w-[70%] m-2">
             <span className="p-2">
               Language Model
             </span>
