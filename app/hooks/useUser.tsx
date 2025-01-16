@@ -32,7 +32,7 @@ export const UserCtxProvider = (props: Props) => {
     const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
 
 
-    const getUserDetails = () => supabase.from('users').select('*').single();
+    const getUserDetails = () => supabase.from('users').select('*').limit(1).single();
 
 
     useEffect(() => {
@@ -53,21 +53,7 @@ export const UserCtxProvider = (props: Props) => {
         } else if (!user && !isLoadingUser && !isLoadingData) {
             setUserDetails(null);
         }
-        // supabase.auth.getSession()
-        //     .then(({data : {session}}) => {
-        //         setUserDetails(session?.user || null);
-        //         setIsLoadingData(false);
-        //     }
-        // )
 
-        // const { data: {subscription} } = supabase.auth.onAuthStateChange((event, session) => {
-        //     setUserDetails(session?.user || null);
-        //     // cookies?
-        // })
-        
-        // return () => {
-        //     subscription.unsubscribe()
-        // }
     }, [user, userDetails, isLoadingUser, isLoadingData]);
 
     const value = {

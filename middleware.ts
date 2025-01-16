@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
       console.log('No cookies found in headers');
       return NextResponse.redirect(new URL('/login', req.url));
     }
-    
+
     const supabase = createMiddlewareClient({req, res})
 
 
@@ -38,5 +38,5 @@ export async function middleware(req: NextRequest) {
 
 // apply middleware to these routes
 export const config = {
-    matcher: ['/dashboard/:path*', '/group/:path*']
+    matcher: [] //'/dashboard/:path*', '/group/:path*'
 };

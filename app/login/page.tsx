@@ -3,14 +3,16 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import * as Form from '@radix-ui/react-form'
-import { useSessionContext } from '@supabase/auth-helpers-react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function Login() {
 
+    const supabase = createClientComponentClient();
     const [error, setError] = useState("");
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { session } = useSessionContext();
+    // const { session } = useSessionContext();
+    // const [session, setSession] = useState<Session | null>(null);
     const redirectPath = searchParams.get('redirect') || "/dashboard"
 
     const handleLogIn = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,36 +23,29 @@ export default function Login() {
 
 
         try {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type' : 'application/json'},
-                body: JSON.stringify({email, password})
-            })
-
-            if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.data);
+            const { error } = await supabase.auth.signInWithPassword({email, password});
+            if (error) {
+                console.log(error.message);
+                return;
             }
-
-            const data = await res.json();
-            console.log(data)
 
         } catch (error) {
             console.log(error);
             setError("There was an issue logging into your account");
             return;
         } 
-
-        // router.push('/dashboard')
     }
 
     useEffect(() => {
-        if (session) {
-            router.refresh();
-            console.log(redirectPath)
-            router.push(redirectPath);
-        }
-    }, [session, router, redirectPath])
+        const { data : { subscription } } = supabase.auth.onAuthStateChange((event, updatedSession) => {      
+            if (updatedSession) {
+              router.refresh();
+              router.push(redirectPath);
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [supabase, router, redirectPath])
 
     return (
         <>
@@ -67,6 +62,7 @@ export default function Login() {
                             <Form.Control asChild>
                             <input
                                 type="email"
+                                placeholder="Email Address"
                                 required
                                 className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -80,6 +76,7 @@ export default function Login() {
                             <Form.Control asChild>
                             <input
                                 type="password"
+                                placeholder="Password"
                                 required
                                 className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />

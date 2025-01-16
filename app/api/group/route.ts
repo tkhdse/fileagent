@@ -21,13 +21,12 @@ export async function POST(req: NextRequest) {
 
         const group_id = group_data[0].id;
         
-        const {data: member_data, error: member_error} = await supabase
+        const {error: member_error} = await supabase
         .from('group_members')
         .insert({user_id: created_by, group_id: group_id})
         .select()
         
-        // console.log(member_data)
-        // console.log(member_error)
+        console.log(member_error?.message)
         
 
     } catch (error) {

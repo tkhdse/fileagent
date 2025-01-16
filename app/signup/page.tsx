@@ -1,11 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as Form from '@radix-ui/react-form'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
-
+    const supabase = createClientComponentClient();
     const [error, setError] = useState("");
+    // const [waiting, setWaiting] = useState(false);
+    const router = useRouter();
     // const router = useRouter();
 
     const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,16 +25,24 @@ export default function Login() {
         }
 
         try {
+            const { data: { user }, error: auth_error } = await supabase.auth.signUp({email, password});
+
+            if (auth_error) {
+                console.log(auth_error.message);
+                return;
+            }
+
             const res = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type' : 'application/json'},
-                body: JSON.stringify({email, password})
+                body: JSON.stringify({user})
             })
 
             if (!res.ok) {
                 const errData = await res.json();
                 throw new Error(errData.data);
             }
+
         } catch (error) {
             console.log(error);
             setError("There was an issue making your account");
@@ -38,8 +50,19 @@ export default function Login() {
         }
 
         alert("Confirm email (check your inbox)");
-        
+        // setWaiting(true);        
     }
+
+    useEffect(() => {
+        const { data : { subscription } } = supabase.auth.onAuthStateChange((event, updatedSession) => {      
+            if (updatedSession) {
+              router.refresh();
+              router.push('/dashboard');
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, [supabase, router])
 
 
     return (
@@ -57,6 +80,7 @@ export default function Login() {
                             <Form.Control asChild>
                             <input
                                 type="email"
+                                placeholder="Email Address"
                                 required
                                 className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
@@ -70,6 +94,7 @@ export default function Login() {
                             <Form.Control asChild>
                             <input
                                 type="password"
+                                placeholder="Password"
                                 required
                                 minLength={5}
                                 className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -84,6 +109,7 @@ export default function Login() {
                             <Form.Control asChild>
                             <input
                                 type="password"
+                                placeholder="Confirm Password"
                                 required
                                 minLength={5}
                                 className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
