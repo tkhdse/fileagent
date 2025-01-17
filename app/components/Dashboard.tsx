@@ -1,30 +1,39 @@
+'use client'
+
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Card from "../components/Card";
-import { createServerSupabaseClient } from "../libs/server";
 import { Group } from "@/types/types";
+import { useEffect, useState } from "react";
+import { useUser } from "../hooks/useUser";
 
 
-const Dashboard = async () => {
-    const supabase = createServerSupabaseClient();
-    const {data: {user}, error: auth_error } = await supabase.auth.getUser();
-    if (!user || auth_error) {
-        console.log("Error fetching user: ", auth_error?.message);
-        return <></>
-    }
-    
+const Dashboard = () => {
+    const supabase = createClientComponentClient();
+    const {user, isLoading} = useUser();
+    const [groups, setGroups] = useState<Group[]>([]);
 
-    
-    const {data, error: query_error} = await supabase
-        .from('groups')
-        .select('*')
-        .eq('created_by', user.id)
-        .order('created_at', {ascending: false})
-    
-    if (query_error) {
-        console.log(query_error.message)
-    }
-    
-    const groups = (data as Group[]) || []
+    useEffect(() => {
 
+        const fetchGroups = async () => {
+            if (user) {
+                const {data, error: query_error} = await supabase
+                    .from('groups')
+                    .select('*')
+                    .eq('created_by', user.id)
+                    .order('created_at', {ascending: false})
+                
+                if (query_error) {
+                    console.log(query_error.message)
+                }
+                
+                setGroups((data as Group[]) || [])
+            }
+        }
+
+        fetchGroups();
+    }, [supabase, user]);
+
+    if (isLoading) return <></>
 
     return (
         <div>
