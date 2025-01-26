@@ -1,0 +1,5 @@
+fastapi==0.100.0  # Latest stable version of FastAPI at the time of writing
+uvicorn==0.23.0  # ASGI server for running FastAPI apps
+torch==2.5.1
+tiktoken=0.8.0
+transformers=4.48.1
